@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import './App.css'
 import FizzBuzz from './components/FizzBuzz/FizzBuzz';
+import SearchForm from './components/SearchForm/SearchForm';
 
 type ActiveComponent = 'fizzbuzz' | 'search' | 'dashboard';
 function App() {
@@ -47,6 +48,7 @@ function App() {
 
       <main>
         {activeComponent === 'fizzbuzz' && <FizzBuzz />}
+        {activeComponent === 'search' && <SearchForm />}
       </main>
     </div>
   )
