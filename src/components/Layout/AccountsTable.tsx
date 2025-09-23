@@ -24,7 +24,7 @@ const AdWordsIcon = () => (
 
 const AccountsTable: React.FC<{ accounts: AccountData[] }> = ({ accounts }) => {
   return (
-    <div className="bg-white rounded-lg shadow-sm">
+    <div className="bg-white rounded-sm shadow-sm">
       <h3 className="text-lg font-medium text-[#212936] p-6 pb-4">
         Accounts requiring attention
       </h3>
@@ -32,6 +32,7 @@ const AccountsTable: React.FC<{ accounts: AccountData[] }> = ({ accounts }) => {
         <table className="min-w-full">
           <thead>
             <tr className="border-b border-gray-200">
+              <th className="px-6 py-3 text-left text-xs font-medium text-[#68737D] uppercase tracking-wider"></th>
               <th className="px-6 py-3 text-left text-xs font-medium text-[#68737D] uppercase tracking-wider">
                 Insights
               </th>
@@ -64,6 +65,10 @@ const AccountsTable: React.FC<{ accounts: AccountData[] }> = ({ accounts }) => {
                         {account.name}
                       </div>
                     </div>
+                  </div>
+                </td>
+                <td className="px-6 py-4 whitespace-nowrap text-sm text-[#212936]">
+                  <div className="flex items-center">
                     <div className="ml-2 px-2 py-1 text-xs bg-[#ECF5F7] text-[#418D8E] rounded">
                       {account.insights}
                     </div>
@@ -85,10 +90,8 @@ const AccountsTable: React.FC<{ accounts: AccountData[] }> = ({ accounts }) => {
                   {account.roas}
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap flex items-center gap-3">
-                  <button className="text-sm text-[#418D8E]">
-                    Actions
-                  </button>
-                  <AiOutlineDown className="text-[#418D8E] mt-1" size={11}/>
+                  <button className="text-sm text-[#418D8E]">Actions</button>
+                  <AiOutlineDown className="text-[#418D8E] mt-1" size={11} />
                 </td>
               </tr>
             ))}

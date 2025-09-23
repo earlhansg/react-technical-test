@@ -71,12 +71,12 @@ const Dashboard: React.FC = () => {
             <h1 className="text-2xl font-semibold text-[#212936] mb-2">
               Good afternoon Richard
             </h1>
-            <p className="text-[#68737D]">
+            <p className="text-[#212936] text-sm">
               What's been happening between 1 Sept - 3 Oct
             </p>
           </div>
           <div className="flex items-center">
-            <select className="border border-gray-300 rounded-md px-3 py-2 bg-white text-sm">
+            <select className="border border-[#68737D] rounded-md px-3 py-2 text-sm text-[#68737D] md:w-50 w-auto">
               <option>Last 30 days</option>
             </select>
           </div>
@@ -113,7 +113,7 @@ const Dashboard: React.FC = () => {
         </div>
 
         {/* Metrics Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 py-3 mb-8 border border-gray-200 rounded-sm">
           {metricsData.map((metric, index) => (
             <MetricCard
               key={index}

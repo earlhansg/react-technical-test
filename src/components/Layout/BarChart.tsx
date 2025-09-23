@@ -7,7 +7,7 @@ const BarChart: React.FC<{ data: ChartData[]; title: string }> = ({
   const maxValue = Math.max(...data.map((d) => d.value));
 
   return (
-    <div className="bg-white p-6 rounded-lg shadow-sm">
+    <div className="bg-white p-6 rounded-sm shadow-sm">
       <h3 className="text-lg font-medium text-[#212936] mb-6">{title}</h3>
       <div className="relative">
         <div className="flex items-end space-x-8 h-48 pl-8">
