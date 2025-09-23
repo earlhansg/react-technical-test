@@ -113,7 +113,7 @@ const SearchForm = () => {
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                     {book.rating !== undefined
-                      ? `${book.rating}/5`
+                      ? `${book.rating}`
                       : "No rating"}
                   </td>
                 </tr>
