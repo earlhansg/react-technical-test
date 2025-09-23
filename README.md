@@ -2,7 +2,7 @@
 
 ## Problems Attempted
 
-I have completed all 4 problems within the recommended 3-hour timeframe:
+I have completed all 4 problems:
 
 1. ✅ **FizzBuzz** - Classic algorithm with React component and comprehensive tests
 2. ✅ **Types** - Network request state types with discriminated unions
@@ -39,3 +39,7 @@ npx vitest --ui
 # Run with coverage report
 npx vitest --coverage
 ```
+
+## 📝 Feedback on the Technical Test
+
+Overall, I found this technical test to be a very good way to showcase my coding abilities. The variety of problems (from algorithmic thinking to building interactive components and designing layouts) gave me the chance to demonstrate both problem-solving skills and practical React/TypeScript development experience.
