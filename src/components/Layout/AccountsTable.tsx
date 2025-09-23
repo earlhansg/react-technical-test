@@ -25,34 +25,32 @@ const AdWordsIcon = () => (
 const AccountsTable: React.FC<{ accounts: AccountData[] }> = ({ accounts }) => {
   return (
     <div className="bg-white rounded-lg shadow-sm">
-      <h3 className="text-lg font-medium text-gray-900 p-6 pb-4">
+      <h3 className="text-lg font-medium text-[#212936] p-6 pb-4">
         Accounts requiring attention
       </h3>
       <div className="overflow-x-auto">
         <table className="min-w-full">
           <thead>
             <tr className="border-b border-gray-200">
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+              <th className="px-6 py-3 text-left text-xs font-medium text-[#68737D] uppercase tracking-wider">
                 Insights
               </th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+              <th className="px-6 py-3 text-left text-xs font-medium text-[#68737D] uppercase tracking-wider">
                 Wasted spend
               </th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+              <th className="px-6 py-3 text-left text-xs font-medium text-[#68737D] uppercase tracking-wider">
                 Spend
               </th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+              <th className="px-6 py-3 text-left text-xs font-medium text-[#68737D] uppercase tracking-wider">
                 Conv.
               </th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+              <th className="px-6 py-3 text-left text-xs font-medium text-[#68737D] uppercase tracking-wider">
                 CPA
               </th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+              <th className="px-6 py-3 text-left text-xs font-medium text-[#68737D] uppercase tracking-wider">
                 ROAS
               </th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                Actions
-              </th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-[#68737D] uppercase tracking-wider"></th>
             </tr>
           </thead>
           <tbody className="divide-y divide-gray-200">
@@ -62,7 +60,7 @@ const AccountsTable: React.FC<{ accounts: AccountData[] }> = ({ accounts }) => {
                   <div className="flex items-center">
                     <AdWordsIcon />
                     <div className="ml-3">
-                      <div className="text-sm font-medium text-gray-900">
+                      <div className="text-sm font-medium text-[#212936]">
                         {account.name}
                       </div>
                     </div>
@@ -71,19 +69,19 @@ const AccountsTable: React.FC<{ accounts: AccountData[] }> = ({ accounts }) => {
                     </div>
                   </div>
                 </td>
-                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                <td className="px-6 py-4 whitespace-nowrap text-sm text-[#212936]">
                   {account.wastedSpend}
                 </td>
-                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                <td className="px-6 py-4 whitespace-nowrap text-sm text-[#212936]">
                   {account.spend}
                 </td>
-                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                <td className="px-6 py-4 whitespace-nowrap text-sm text-[#212936]">
                   {account.conv}
                 </td>
-                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                <td className="px-6 py-4 whitespace-nowrap text-sm text-[#212936]">
                   {account.cpa}
                 </td>
-                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                <td className="px-6 py-4 whitespace-nowrap text-sm text-[#212936]">
                   {account.roas}
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap flex items-center gap-3">
