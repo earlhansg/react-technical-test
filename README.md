@@ -18,9 +18,9 @@ I have completed all 4 problems within the recommended 3-hour timeframe:
 ### Installation
 ```bash
 npm install
+```
 
 ### Running the Project
-
 ```bash
 npm run dev
 ```
