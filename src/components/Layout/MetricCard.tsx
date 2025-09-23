@@ -8,16 +8,13 @@ const MetricCard: React.FC<MetricData> = ({
 }) => {
   return (
     <div className="bg-white p-4 rounded-lg shadow-sm">
-      <div className="text-sm text-gray-600 mb-1">{label}</div>
-      <div className="text-2xl font-semibold text-gray-900 mb-1">{value}</div>
+      <div className="text-sm text-[#68737D] mb-1">{label}</div>
       <div className="flex items-center">
-        <span className="text-sm text-gray-600">{subtitle}</span>
-        {linkText && (
-          <button className="text-sm text-blue-600 hover:text-blue-800 ml-2">
+        <span className="text-2xl font-semibold text-[#212936]">{value}</span>
+        <button className="text-sm text-[#418D8E] ml-2 cursor-pointer font-medium">
             {linkText}
           </button>
-        )}
-      </div>
+        </div>
     </div>
   );
 };
