@@ -68,10 +68,10 @@ const Dashboard: React.FC = () => {
         {/* Header */}
         <div className="flex justify-between items-start mb-8">
           <div>
-            <h1 className="text-2xl font-semibold text-gray-900 mb-2">
+            <h1 className="text-2xl font-semibold text-[#212936] mb-2">
               Good afternoon Richard
             </h1>
-            <p className="text-gray-600">
+            <p className="text-[#68737D]">
               What's been happening between 1 Sept - 3 Oct
             </p>
           </div>
