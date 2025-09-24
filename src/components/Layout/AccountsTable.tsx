@@ -24,7 +24,7 @@ const AdWordsIcon = () => (
 
 const AccountsTable: React.FC<{ accounts: AccountData[] }> = ({ accounts }) => {
   return (
-    <div className="bg-white rounded-sm shadow-sm">
+    <div className="border border-gray-200 rounded-sm">
       <h3 className="text-lg font-medium text-[#212936] p-6 pb-4">
         Accounts requiring attention
       </h3>

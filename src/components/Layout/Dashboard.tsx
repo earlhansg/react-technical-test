@@ -143,7 +143,7 @@ const Dashboard: React.FC = () => {
         </div>
 
         {/* Nivo ResponsiveBar Chart */}
-        <div className="mb-8 bg-white p-6 rounded-lg">
+        <div className="mb-8 p-6 border border-gray-200 rounded-sm">
           <BarChart
             chartData={wastedSpendByWeek as ChartData[]}
             title="Wasted spend by week"
