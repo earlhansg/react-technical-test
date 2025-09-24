@@ -1,219 +1,138 @@
-import { describe, it, expect } from 'vitest';
+import { describe, it, expect, vi } from 'vitest';
 import { render, screen } from '@testing-library/react';
 import BarChart from '../components/Layout/BarChart';
-import type { ChartData } from '../types';
+import type { ChartData } from '../types/ChartData';
 
-// Mock data for testing
+// Mock the ResponsiveBar component from @nivo/bar
+vi.mock('@nivo/bar', () => ({
+  ResponsiveBar: vi.fn(({ data, keys, indexBy, colors, axisLeft, enableLabel, ariaLabel, barAriaLabel }) => (
+    <div data-testid="responsive-bar" data-aria-label={ariaLabel}>
+      <div data-testid="chart-keys">{keys?.join(',')}</div>
+      <div data-testid="chart-indexby">{indexBy}</div>
+      <div data-testid="chart-colors">{colors?.join(',')}</div>
+      <div data-testid="chart-enable-label">{enableLabel?.toString()}</div>
+      <div data-testid="y-axis-format">
+        {axisLeft?.format ? axisLeft.format(400) : 'no-format'}
+      </div>
+      {data?.map((item: any, index: number) => (
+        <div key={index} data-testid={`data-point-${index}`}>
+          <span data-testid={`week-${index}`}>{item.week}</span>
+          <span data-testid={`wasted-spend-${index}`}>{item.wastedSpend}</span>
+          <span data-testid={`normal-spend-${index}`}>{item.normalSpend}</span>
+        </div>
+      ))}
+    </div>
+  ))
+}));
+
 const mockChartData: ChartData[] = [
-  { week: '2-8 Sep', value: 300 },
-  { week: '9-15 Sep', value: 450 },
-  { week: 'Last week', value: 200 },
-  { week: 'This week', value: 250 }
-];
-
-const singleDataPoint: ChartData[] = [
-  { week: 'Week 1', value: 100 }
-];
-
-const emptyData: ChartData[] = [];
-
-const highValueData: ChartData[] = [
-  { week: 'Week 1', value: 1000 },
-  { week: 'Week 2', value: 800 },
-  { week: 'Week 3', value: 1200 }
+  {
+    week: "2-8 Sep",
+    wastedSpend: 200,
+    normalSpend: 400,
+  },
+  {
+    week: "9-15 Sep",
+    wastedSpend: 450,
+    normalSpend: 300,
+  },
+  {
+    week: "Last week",
+    wastedSpend: 250,
+    normalSpend: 200,
+  },
+  {
+    week: "This week",
+    wastedSpend: 200,
+    normalSpend: 150,
+  },
 ];
 
 describe('BarChart', () => {
-  it('renders chart title correctly', () => {
-    render(<BarChart data={mockChartData} title="Weekly Revenue" />);
-
-    expect(screen.getByRole('heading', { level: 3 })).toBeInTheDocument();
-    expect(screen.getByText('Weekly Revenue')).toBeInTheDocument();
+  it('renders chart title and ResponsiveBar component', () => {
+    render(<BarChart chartData={mockChartData} title="Wasted spend by week" />);
+    
+    // Check title is rendered
+    expect(screen.getByText('Wasted spend by week')).toBeInTheDocument();
+    expect(screen.getByText('Wasted spend by week').tagName).toBe('H3');
+    
+    // Check ResponsiveBar is rendered
+    const responsiveBar = screen.getByTestId('responsive-bar');
+    expect(responsiveBar).toBeInTheDocument();
   });
 
-  it('renders all data points with correct week labels', () => {
-    render(<BarChart data={mockChartData} title="Test Chart" />);
-
-    expect(screen.getByText('2-8 Sep')).toBeInTheDocument();
-    expect(screen.getByText('9-15 Sep')).toBeInTheDocument();
-    expect(screen.getByText('Last week')).toBeInTheDocument();
-    expect(screen.getByText('This week')).toBeInTheDocument();
-  });
-
-  it('applies correct CSS classes to container', () => {
-    render(<BarChart data={mockChartData} title="Test Chart" />);
-
-    const container = screen.getByText('Test Chart').closest('div');
-    expect(container).toHaveClass('bg-white', 'p-6', 'rounded-sm', 'shadow-sm');
-  });
-
-  it('applies correct CSS classes to title', () => {
-    render(<BarChart data={mockChartData} title="Test Chart" />);
-
+  it('applies correct styling and passes correct chart configuration', () => {
+    render(<BarChart chartData={mockChartData} title="Test Chart" />);
+    
+    // Check title styling
     const title = screen.getByText('Test Chart');
-    expect(title).toHaveClass('text-lg', 'font-medium', 'text-[#212936]', 'mb-6');
-  });
-
-  it('renders Y-axis labels correctly', () => {
-    render(<BarChart data={mockChartData} title="Test Chart" />);
-
-    expect(screen.getByText('$800')).toBeInTheDocument();
-    expect(screen.getByText('$600')).toBeInTheDocument();
-    expect(screen.getByText('$400')).toBeInTheDocument();
-    expect(screen.getByText('$200')).toBeInTheDocument();
-    expect(screen.getByText('0')).toBeInTheDocument();
-  });
-
-  it('renders correct number of bar elements', () => {
-    const { container } = render(<BarChart data={mockChartData} title="Test Chart" />);
-
-    // Each data point should have 2 divs (light background + dark foreground)
-    const lightBars = container.querySelectorAll('.bg-\\[\\#FBD5D5\\]');
-    const darkBars = container.querySelectorAll('.bg-\\[\\#9B1C1C\\]');
-
-    expect(lightBars).toHaveLength(4); // 4 data points
-    expect(darkBars).toHaveLength(4); // 4 data points
-  });
-
-  it('calculates bar heights correctly based on max value', () => {
-    const { container } = render(<BarChart data={mockChartData} title="Test Chart" />);
-
-    // Max value is 450, so heights should be relative to this
-    const lightBars = container.querySelectorAll('.bg-\\[\\#FBD5D5\\]');
+    expect(title).toHaveClass('text-lg', 'font-semibold', 'text-[#212936]', 'mb-4');
     
-    // Check that bars have height styles applied
-    expect(lightBars[0]).toHaveStyle('height: 66.66666666666666%'); // 300/450 * 100
-    expect(lightBars[1]).toHaveStyle('height: 100%'); // 450/450 * 100 (max value)
-    expect(lightBars[2]).toHaveStyle('height: 44.44444444444444%'); // 200/450 * 100
-    expect(lightBars[3]).toHaveStyle('height: 55.55555555555556%'); // 250/450 * 100
+    // Check chart configuration
+    expect(screen.getByTestId('chart-keys')).toHaveTextContent('wastedSpend,normalSpend');
+    expect(screen.getByTestId('chart-indexby')).toHaveTextContent('week');
+    expect(screen.getByTestId('chart-colors')).toHaveTextContent('#9B1C1C,#FBD5D5');
+    expect(screen.getByTestId('chart-enable-label')).toHaveTextContent('false');
   });
 
-  it('dark bars are 80% of light bar heights', () => {
-    const { container } = render(<BarChart data={mockChartData} title="Test Chart" />);
-
-    const darkBars = container.querySelectorAll('.bg-\\[\\#9B1C1C\\]');
+  it('formats Y-axis values with dollar sign and renders chart container with correct height', () => {
+    const { container } = render(<BarChart chartData={mockChartData} title="Test Chart" />);
     
-    // Dark bars should be 80% of the light bar heights
-    expect(darkBars[0]).toHaveStyle('height: 53.33333333333333%'); // (300/450 * 100) * 0.8
-    expect(darkBars[1]).toHaveStyle('height: 80%'); // (450/450 * 100) * 0.8
-    expect(darkBars[2]).toHaveStyle('height: 35.55555555555556%'); // (200/450 * 100) * 0.8
-    expect(darkBars[3]).toHaveStyle('height: 44.44444444444444%'); // (250/450 * 100) * 0.8
-  });
-
-  it('handles single data point correctly', () => {
-    render(<BarChart data={singleDataPoint} title="Single Point Chart" />);
-
-    expect(screen.getByText('Week 1')).toBeInTheDocument();
+    // Check Y-axis formatting
+    const yAxisFormat = screen.getByTestId('y-axis-format');
+    expect(yAxisFormat).toHaveTextContent('$400');
     
-    const { container } = render(<BarChart data={singleDataPoint} title="Single Point Chart" />);
-    const lightBars = container.querySelectorAll('.bg-\\[\\#FBD5D5\\]');
-    const darkBars = container.querySelectorAll('.bg-\\[\\#9B1C1C\\]');
+    // Check container height
+    const chartDiv = container.querySelector('div[style*="height: 400px"]');
+    expect(chartDiv).toBeInTheDocument();
+    expect(chartDiv).toHaveStyle('height: 400px');
+  });
 
-    expect(lightBars).toHaveLength(1);
-    expect(darkBars).toHaveLength(1);
+  it('renders all data points with correct values', () => {
+    render(<BarChart chartData={mockChartData} title="Test Chart" />);
     
-    // Single point should be 100% height
-    expect(lightBars[0]).toHaveStyle('height: 100%');
-    expect(darkBars[0]).toHaveStyle('height: 80%');
+    // Check all data points are rendered
+    const dataPoints = screen.getAllByTestId(/^data-point-/);
+    expect(dataPoints).toHaveLength(4);
+
+    // Check specific data values
+    expect(screen.getByTestId('week-0')).toHaveTextContent('2-8 Sep');
+    expect(screen.getByTestId('wasted-spend-0')).toHaveTextContent('200');
+    expect(screen.getByTestId('normal-spend-0')).toHaveTextContent('400');
+
+    expect(screen.getByTestId('week-1')).toHaveTextContent('9-15 Sep');
+    expect(screen.getByTestId('wasted-spend-1')).toHaveTextContent('450');
+    expect(screen.getByTestId('normal-spend-1')).toHaveTextContent('300');
+
+    expect(screen.getByTestId('week-2')).toHaveTextContent('Last week');
+    expect(screen.getByTestId('wasted-spend-2')).toHaveTextContent('250');
+    expect(screen.getByTestId('normal-spend-2')).toHaveTextContent('200');
+
+    expect(screen.getByTestId('week-3')).toHaveTextContent('This week');
+    expect(screen.getByTestId('wasted-spend-3')).toHaveTextContent('200');
+    expect(screen.getByTestId('normal-spend-3')).toHaveTextContent('150');
   });
 
-  it('handles empty data gracefully', () => {
-    const { container } = render(<BarChart data={emptyData} title="Empty Chart" />);
-
-    expect(screen.getByText('Empty Chart')).toBeInTheDocument();
+  it('has correct accessibility attributes and validates data integrity', () => {
+    render(<BarChart chartData={mockChartData} title="Test Chart" />);
     
-    const lightBars = container.querySelectorAll('.bg-\\[\\#FBD5D5\\]');
-    const darkBars = container.querySelectorAll('.bg-\\[\\#9B1C1C\\]');
-
-    expect(lightBars).toHaveLength(0);
-    expect(darkBars).toHaveLength(0);
-  });
-
-  it('handles high values correctly', () => {
-    const { container } = render(<BarChart data={highValueData} title="High Values Chart" />);
-
-    // Max value is 1200
-    const lightBars = container.querySelectorAll('.bg-\\[\\#FBD5D5\\]');
+    // Check accessibility
+    const responsiveBar = screen.getByTestId('responsive-bar');
+    expect(responsiveBar).toHaveAttribute('data-aria-label', 'Wasted spend by week chart');
     
-    expect(lightBars[0]).toHaveStyle('height: 83.33333333333334%'); // 1000/1200 * 100
-    expect(lightBars[1]).toHaveStyle('height: 66.66666666666666%'); // 800/1200 * 100
-    expect(lightBars[2]).toHaveStyle('height: 100%'); // 1200/1200 * 100
-  });
-
-  it('applies correct bar styling classes', () => {
-    const { container } = render(<BarChart data={mockChartData} title="Test Chart" />);
-
-    const lightBars = container.querySelectorAll('.bg-\\[\\#FBD5D5\\]');
-    const darkBars = container.querySelectorAll('.bg-\\[\\#9B1C1C\\]');
-
-    // Check light bar classes
-    lightBars.forEach(bar => {
-      expect(bar).toHaveClass('w-12', 'bg-[#FBD5D5]', 'rounded-sm', 'mb-1');
-    });
-
-    // Check dark bar classes
-    darkBars.forEach(bar => {
-      expect(bar).toHaveClass('w-12', 'bg-[#9B1C1C]', 'rounded-sm', 'absolute', 'bottom-0');
-    });
-  });
-
-  it('week labels have correct styling', () => {
-    render(<BarChart data={mockChartData} title="Test Chart" />);
-
-    const weekLabels = [
-      screen.getByText('2-8 Sep'),
-      screen.getByText('9-15 Sep'),
-      screen.getByText('Last week'),
-      screen.getByText('This week')
-    ];
-
-    weekLabels.forEach(label => {
-      expect(label).toHaveClass('text-xs', 'text-[#68737D]', 'mt-2');
-    });
-  });
-
-  it('maintains proper chart structure and layout', () => {
-    const { container } = render(<BarChart data={mockChartData} title="Test Chart" />);
-
-    // Check main chart container
-    const chartContainer = container.querySelector('.flex.items-end.space-x-8.h-48.pl-8');
-    expect(chartContainer).toBeInTheDocument();
-
-    // Check Y-axis container
-    const yAxisContainer = container.querySelector('.absolute.left-0.top-0.h-40');
-    expect(yAxisContainer).toBeInTheDocument();
-  });
-
-  it('handles zero values correctly', () => {
-    const zeroValueData: ChartData[] = [
-      { week: 'Week 1', value: 0 },
-      { week: 'Week 2', value: 100 }
-    ];
-
-    const { container } = render(<BarChart data={zeroValueData} title="With Zero" />);
-    const lightBars = container.querySelectorAll('.bg-\\[\\#FBD5D5\\]');
-
-    // Zero value should result in 0% height, 100 should be 100%
-    expect(lightBars[0]).toHaveStyle('height: 0%');
-    expect(lightBars[1]).toHaveStyle('height: 100%');
-  });
-
-  it('handles different title lengths', () => {
-    const longTitle = "This is a very long chart title that might wrap to multiple lines";
-    render(<BarChart data={mockChartData} title={longTitle} />);
-
-    expect(screen.getByText(longTitle)).toBeInTheDocument();
-  });
-
-  it('renders with custom week labels', () => {
-    const customData: ChartData[] = [
-      { week: 'Q1 2024', value: 300 },
-      { week: 'Q2 2024', value: 450 }
-    ];
-
-    render(<BarChart data={customData} title="Quarterly Data" />);
-
-    expect(screen.getByText('Q1 2024')).toBeInTheDocument();
-    expect(screen.getByText('Q2 2024')).toBeInTheDocument();
+    // Validate data integrity - check that totals match expected values
+    const expectedTotals = [600, 750, 450, 350];
+    
+    for (let i = 0; i < 4; i++) {
+      const wastedValue = parseInt(screen.getByTestId(`wasted-spend-${i}`).textContent || '0');
+      const normalValue = parseInt(screen.getByTestId(`normal-spend-${i}`).textContent || '0');
+      
+      expect(wastedValue + normalValue).toBe(expectedTotals[i]);
+      expect(wastedValue).toBeGreaterThan(0);
+      expect(normalValue).toBeGreaterThan(0);
+      
+      // Ensure values are within chart's max scale (800)
+      expect(wastedValue + normalValue).toBeLessThanOrEqual(800);
+    }
   });
 });

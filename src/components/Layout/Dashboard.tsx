@@ -4,7 +4,6 @@ import type { AccountData, ChartData, MetricData } from "../../types";
 import AccountsTable from "./AccountsTable";
 import MetricCard from "./MetricCard";
 import BarChart from "./BarChart";
-import { ResponsiveBar } from "@nivo/bar";
 
 const Dashboard: React.FC = () => {
   const [activeTab, setActiveTab] = useState<"overview" | "insights">(
@@ -36,14 +35,7 @@ const Dashboard: React.FC = () => {
     },
   ];
 
-  const chartData: ChartData[] = [
-    { week: "2-8 Sep", value: 200 },
-    { week: "9-15 Sep", value: 450 },
-    { week: "Last week", value: 200 },
-    { week: "This week", value: 250 },
-  ];
-
-  const dataChart = [
+  const wastedSpendByWeek = [
     {
       week: "2-8 Sep",
       wastedSpend: 200,
@@ -150,48 +142,12 @@ const Dashboard: React.FC = () => {
           ))}
         </div>
 
-        {/* Chart */}
-        {/* <div className="mb-8">
-          <BarChart data={chartData} title="Wasted spend by week" />
-        </div> */}
         {/* Nivo ResponsiveBar Chart */}
         <div className="mb-8 bg-white p-6 rounded-lg">
-          <h3 className="text-lg font-semibold text-[#212936] mb-4">Wasted spend by week</h3>
-          <div style={{ height: "400px" }}>
-            <ResponsiveBar
-              data={dataChart}
-              keys={["wastedSpend", "normalSpend"]}
-              indexBy="week"
-              margin={{ top: 20, right: 20, bottom: 50, left: 60 }}
-              padding={0.8}
-              valueScale={{ type: "linear", min: 0, max: 800 }}
-              indexScale={{ type: "band", round: true }}
-              colors={["#9B1C1C", "#FBD5D5"]}
-              defs={[]}
-              borderColor={{ from: "color", modifiers: [["darker", 1.6]] }}
-              axisTop={null}
-              axisRight={null}
-              axisBottom={{
-                tickSize: 5,
-                tickPadding: 5,
-                tickRotation: 0,
-              }}
-              axisLeft={{
-                tickSize: 5,
-                tickPadding: 5,
-                tickRotation: 0,
-                tickValues: [0, 200, 400, 600, 800],
-                format: (value) => `$${value}`,
-              }}
-              enableLabel={false}
-              legends={[]}
-              role="application"
-              ariaLabel="Wasted spend by week chart"
-              barAriaLabel={function (e) {
-                return e.id + ": $" + e.formattedValue + " in week: " + e.indexValue;
-              }}
-            />
-          </div>
+          <BarChart
+            chartData={wastedSpendByWeek as ChartData[]}
+            title="Wasted spend by week"
+          />
         </div>
 
         {/* Accounts Table */}

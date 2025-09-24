@@ -1,44 +1,53 @@
+import { ResponsiveBar } from "@nivo/bar";
 import type { ChartData } from "../../types";
 
-const BarChart: React.FC<{ data: ChartData[]; title: string }> = ({
-  data,
+const BarChart: React.FC<{ chartData: ChartData[]; title: string }> = ({
+  chartData,
   title,
 }) => {
-  const maxValue = Math.max(...data.map((d) => d.value));
-
   return (
-    <div className="bg-white p-6 rounded-sm shadow-sm">
-      <h3 className="text-lg font-medium text-[#212936] mb-6">{title}</h3>
-      <div className="relative">
-        <div className="flex items-end space-x-8 h-48 pl-8">
-          {data.map((item, index) => (
-            <div key={index} className="flex flex-col items-center flex-1">
-              <div className="relative w-full flex flex-col items-center justify-end h-40">
-                {/* Light background bar */}
-                <div
-                  className="w-12 bg-[#FBD5D5] rounded-sm mb-1"
-                  style={{ height: `${(item.value / maxValue) * 100}%` }}
-                />
-                {/* Dark foreground bar */}
-                <div
-                  className="w-12 bg-[#9B1C1C] rounded-sm absolute bottom-0"
-                  style={{ height: `${(item.value / maxValue) * 80}%` }}
-                />
-              </div>
-              <div className="text-xs text-[#68737D] mt-2">{item.week}</div>
-            </div>
-          ))}
-        </div>
-        {/* Y-axis labels */}
-        <div className="absolute left-0 top-0 h-40 flex flex-col justify-between text-xs text-[#68737D]">
-          <span>$800</span>
-          <span>$600</span>
-          <span>$400</span>
-          <span>$200</span>
-          <span>0</span>
-        </div>
+    <>
+      <h3 className="text-lg font-semibold text-[#212936] mb-4">
+        {title}
+      </h3>
+      <div style={{ height: "400px" }}>
+        <ResponsiveBar
+          data={chartData}
+          keys={["wastedSpend", "normalSpend"]}
+          indexBy="week"
+          margin={{ top: 20, right: 20, bottom: 50, left: 60 }}
+          padding={0.8}
+          valueScale={{ type: "linear", min: 0, max: 800 }}
+          indexScale={{ type: "band", round: true }}
+          colors={["#9B1C1C", "#FBD5D5"]}
+          defs={[]}
+          borderColor={{ from: "color", modifiers: [["darker", 1.6]] }}
+          axisTop={null}
+          axisRight={null}
+          axisBottom={{
+            tickSize: 5,
+            tickPadding: 5,
+            tickRotation: 0,
+          }}
+          axisLeft={{
+            tickSize: 5,
+            tickPadding: 5,
+            tickRotation: 0,
+            tickValues: [0, 200, 400, 600, 800],
+            format: (value) => `$${value}`,
+          }}
+          enableLabel={false}
+          legends={[]}
+          role="application"
+          ariaLabel="Wasted spend by week chart"
+          barAriaLabel={function (e) {
+            return (
+              e.id + ": $" + e.formattedValue + " in week: " + e.indexValue
+            );
+          }}
+        />
       </div>
-    </div>
+    </>
   );
 };
 
