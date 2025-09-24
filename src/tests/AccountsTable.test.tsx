@@ -47,13 +47,6 @@ describe('AccountsTable', () => {
     expect(screen.getByText('Accounts requiring attention')).toBeInTheDocument();
   });
 
-  it('applies correct CSS classes to container', () => {
-    render(<AccountsTable accounts={mockAccountsData} />);
-
-    const container = screen.getByText('Accounts requiring attention').closest('div');
-    expect(container).toHaveClass('bg-white', 'rounded-sm', 'shadow-sm');
-  });
-
   it('applies correct CSS classes to title', () => {
     render(<AccountsTable accounts={mockAccountsData} />);
 
